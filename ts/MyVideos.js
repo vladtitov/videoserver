@@ -4,7 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var models_1 = require("../../client/app/services/models");
+var models_1 = require("./models");
 var path = require('path');
 var fs = require('fs');
 var request = require('request');

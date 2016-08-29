@@ -1,10 +1,10 @@
-///<reference path="../../typings/q/Q.d.ts"/>
+///<reference path="../typings/q/Q.d.ts"/>
 
 
 
 import Q = require('q');
-import {VOAsset} from "../../client/app/services/models";
-import {UpdateResult, DBDriver} from "../../server/db/dbDriver";
+import {VOAsset} from "./models";
+//import {UpdateResult, DBDriver} from "../../server/db/dbDriver";
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -149,24 +149,5 @@ export class  VideoProcess {
     };
 
 
-    saveInDatabase(asset:VOAsset): Q.Promise<any> {
-        var def: Q.Deferred<any> = Q.defer();
-        var db = new DBDriver(null);
-        asset.status = 'newvideo';
-        asset.timestamp = Math.round(Date.now()/1000);
-        db.insertRow(asset,'process').done(
-            res=>{
-                var db = new DBDriver(this.folder);
-                asset.process_id = res.insertId;
-                db.insertRow(asset,'assets').done(
-                    res=>def.resolve(res)
-                    ,err=> def.reject(err)
-                )
-            }
-        ,err=> def.reject(err)
-        )
-
-        return def.promise;
-    };
 }
 

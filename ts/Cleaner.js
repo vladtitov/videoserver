@@ -1,5 +1,5 @@
 "use strict";
-var models_1 = require("../../client/app/services/models");
+var models_1 = require("./models");
 var path = require('path');
 var fs = require('fs');
 var request = require('request');

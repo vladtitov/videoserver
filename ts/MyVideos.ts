@@ -3,7 +3,7 @@
  */
 ///<reference path="../server.ts"/>
 
-import {VOAsset} from "../../client/app/services/models";
+import {VOAsset} from "./models";
 
 import * as path from 'path'
 import * as http from 'http';

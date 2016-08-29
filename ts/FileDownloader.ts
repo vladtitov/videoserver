@@ -1,7 +1,7 @@
 /**
  * Created by Vlad on 8/25/2016.
  */
-import {VOAsset} from "../../client/app/services/models";
+import {VOAsset} from "./models";
 
 import * as path from 'path'
 import * as http from 'http';
