@@ -1,11 +1,11 @@
 /**
  * Created by Vlad on 5/13/2016.
  */
-/// <reference path="../typings/express/express.d.ts" />
-/// <reference path="../typings/body-parser/body-parser.d.ts" />
-///<reference path="../typings/express-session/express-session.d.ts"/>
-///<reference path="../typings/cookie-parser/cookie-parser.d.ts"/>
-///<reference path="../typings/request/request.d.ts"/>
+/// <reference path="typings/express/express.d.ts" />
+/// <reference path="typings/body-parser/body-parser.d.ts" />
+///<reference path="typings/express-session/express-session.d.ts"/>
+///<reference path="typings/cookie-parser/cookie-parser.d.ts"/>
+///<reference path="typings/request/request.d.ts"/>
 
 
 import * as http from 'http';

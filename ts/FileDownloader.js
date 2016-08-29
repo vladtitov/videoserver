@@ -34,4 +34,3 @@ var FileDownloader = (function () {
     return FileDownloader;
 }());
 exports.FileDownloader = FileDownloader;
-//# sourceMappingURL=FileDownloader.js.map
