@@ -32,7 +32,10 @@ var Cleaner = (function () {
         var _this = this;
         asset.status = 'processed';
         var url = this.server + 'videoserver/ready';
+        //console.log(url);
         request.post(url, { json: true, body: asset }, function (err, res, body) {
+            // console.log(err);
+            // console.log(body);
             if (body.data) {
                 var asset = new models_1.VOAsset(body.data);
                 _this.isInprocess = false;
@@ -66,3 +69,4 @@ var Cleaner = (function () {
     return Cleaner;
 }());
 exports.Cleaner = Cleaner;
+//# sourceMappingURL=Cleaner.js.map

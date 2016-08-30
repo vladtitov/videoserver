@@ -1,3 +1,4 @@
+///<reference path="../typings/q/Q.d.ts"/>
 "use strict";
 var Q = require('q');
 var path = require('path');
@@ -13,6 +14,7 @@ var VideoProcess = (function () {
         var filename = asset.filename;
         var src = path.resolve(asset.workingFolder + '/' + asset.filename);
         var currentFolder = this.folder + 'userVideos/';
+        // var destPath = cientFolder + filename;
         var thumbs;
         var w = 256;
         var k = w / asset.width;
@@ -28,6 +30,7 @@ var VideoProcess = (function () {
                 return val;
             });
             asset.thumb = thumbs.join(', ');
+            // console.log('screenshots are ' + thumbs.join(', '));
         })
             .on('end', function () {
             deferred.resolve(asset);
@@ -38,6 +41,7 @@ var VideoProcess = (function () {
         })
             .takeScreenshots({
             filename: filename + '.png',
+            // count: 1,
             timemarks: ['10%', '30%', '50%'],
             size: w + 'x' + h
         }, asset.workingFolder);
@@ -47,11 +51,14 @@ var VideoProcess = (function () {
         var def = Q.defer();
         var filename = asset.filename;
         var src = path.resolve(asset.workingFolder + '/' + asset.filename);
+        // var cientFolder = this.folder + 'userVideos/';
         var newName = asset.filename.substr(0, asset.filename.lastIndexOf('.')) + '.mp4';
         var destPath = path.resolve(asset.workingFolder + '/' + newName);
+        //  var cientFolder = this.folder + 'userVideos/';
         ffmpeg(src)
             .on('end', function () {
             console.log('end convert');
+            // asset.path = destPath;
             asset.filename = newName;
             def.resolve(asset);
         })
@@ -66,15 +73,18 @@ var VideoProcess = (function () {
     VideoProcess.prototype.getMetadata = function (asset) {
         var deferred = Q.defer();
         var src = path.resolve(asset.workingFolder + '/' + asset.filename);
+        // console.log('tempDir+filename = ', this.tempDir+filename);
         this.metadata = ffmpeg.ffprobe(src, function (err, mdata) {
             if (err) {
                 deferred.reject(err);
                 return;
             }
+            // console.log('metadata ', mdata);
             var stream = mdata.streams[0];
             asset.width = stream.width;
             asset.height = stream.height;
             asset.duration = Math.round(stream.duration);
+            // asset.metadata = JSON.stringify(mdata);
             deferred.resolve(asset);
         });
         return deferred.promise;
@@ -83,15 +93,23 @@ var VideoProcess = (function () {
         var _this = this;
         var deferred = Q.defer();
         this.getMetadata(asset).then(function (asset) {
+            // console.log('metadata ', vp.metadata);
             _this.convertVideo(asset).then(function (asset) {
                 _this.makeThumbnails(asset).then(function (asset) {
                     deferred.resolve(asset);
+                    // console.log('vp.makeThumbnail done ', asset);
+                    /*  this.insertInDB(asset).then(function (result:UpdateResult) {
+                          deferred.resolve(result);
+                      }, (err)=> {deferred.reject(err)});
+  */
                 }, function (err) { deferred.reject(err); });
             }, function (err) { deferred.reject(err); });
         }, function (err) { deferred.reject(err); });
+        // console.log('processVideo');
         return deferred.promise;
     };
     ;
     return VideoProcess;
 }());
 exports.VideoProcess = VideoProcess;
+//# sourceMappingURL=VideoProcess.js.map

@@ -1,3 +1,7 @@
+/**
+ * Created by Vlad on 8/25/2016.
+ */
+///<reference path="../server.ts"/>
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -17,6 +21,7 @@ var MyVideos = (function (_super) {
         _super.call(this);
         this.server = 'http://192.168.1.10:56777/';
         this.videoStatus = 'newvideo';
+        this.readInQueue();
     }
     MyVideos.prototype.registerReady = function (asset) {
         var _this = this;
@@ -40,7 +45,7 @@ var MyVideos = (function (_super) {
         dwd.getFile();
     };
     MyVideos.prototype.onError = function (err, asset) {
-        console.error(err, asset);
+        console.error('onError ' + new Date().toLocaleString());
         console.error(err, asset);
     };
     MyVideos.prototype.startProcess = function (asset) {
@@ -55,15 +60,51 @@ var MyVideos = (function (_super) {
         var _this = this;
         setTimeout(function () { return _this.getNewVideo(); }, 6000);
     };
-    MyVideos.prototype.getNewVideo = function () {
+    MyVideos.prototype.removefromQueue = function (id) {
+        var ind = this.inqueue.indexOf(id);
+        if (ind !== -1)
+            return;
+        this.inqueue.splice(ind, 1);
+        this.saveInQueue();
+    };
+    MyVideos.prototype.readInQueue = function () {
+        var str;
+        if (fs.existsSync('inqueue.json'))
+            str = fs.readFileSync('inqueue.json', 'utf8');
+        if (str)
+            this.inqueue = JSON.parse(str);
+        else
+            this.inqueue = [];
+    };
+    MyVideos.prototype.saveInQueue = function () {
         var _this = this;
+        fs.writeFile(path.resolve('inqueue.json'), JSON.stringify(this.inqueue), function (err) {
+            if (err)
+                return _this.onError(err, null);
+        });
+    };
+    MyVideos.prototype.addInQueue = function (id) {
+        if (this.inqueue.indexOf(id) !== -1)
+            return false;
+        this.inqueue.push[id];
+        this.saveInQueue();
+        return true;
+    };
+    MyVideos.prototype.getNewVideo = function (id) {
+        var _this = this;
+        if (id) {
+            this.addInQueue(id);
+        }
         if (this.isInprocess)
             return;
         this.isInprocess = true;
+        //console.log(this.server+'videoserver/get-new-file');
         var url = this.server + 'videoserver/get-new-file/' + this.videoStatus;
         request.get(url, { json: true }, function (error, response, body) {
             console.log(body);
             if (error) {
+                _this.isInprocess = false;
+                setTimeout(function () { return _this.getNewVideo(); }, 60000);
                 _this.onError(error, null);
                 return;
             }
@@ -84,10 +125,14 @@ var MyVideos = (function (_super) {
                     });
                 }
             }
-            else
+            else {
+                setTimeout(function () { return _this.getNewVideo(); }, 60000);
                 _this.onError(body, null);
+            }
+            // console.log(body)
         });
     };
     return MyVideos;
 }(Cleaner_1.Cleaner));
 exports.MyVideos = MyVideos;
+//# sourceMappingURL=MyVideos.js.map

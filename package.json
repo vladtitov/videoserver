@@ -1,0 +1,45 @@
+{
+  "name": "Digital",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./server",
+    "test": "apidoc -i server/ -o client/apidocs/ -t apitemplate/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladtitov/DigitalSignage.git"
+  },
+  "author": "herotech",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vladtitov/DigitalSignage/issues"
+  },
+  "homepage": "https://github.com/vladtitov/DigitalSignage#readme",
+  "dependencies": {
+    "async": "^2.0.0",
+    "body-parser": "^1.15.1",
+    "cookie-parser": "^1.4.2",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "feed-read": "0.0.1",
+    "fluent-ffmpeg": "^2.1.0",
+    "fs-extra": "^0.30.0",
+    "http-proxy": "^1.14.0",
+    "http-server": "^0.9.0",
+    "jimp": "^0.2.24",
+    "lodash": "^4.12.0",
+    "moment": "^2.13.0",
+    "moment-jalaali": "^0.4.0",
+    "multer": "^1.1.0",
+    "node-phantom": "^0.2.5",
+    "nodemailer": "^2.5.0",
+    "phantom": "^2.1.12",
+    "q": "^1.4.1",
+    "request": "^2.73.0",
+    "sqlite3": "^3.1.4",
+    "webpage": "^0.3.0",
+    "webshot": "0.18.0"
+  }
+}

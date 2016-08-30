@@ -36,10 +36,28 @@ app.use(function(req:express.Request, res:express.Response, next) {
     next();
 });
 
+app.get('newvideo/:id',function(req:express.Request, Response:express.Response) {
+    var id:number = Number(req.params.id);
+    if(isNaN(id)){
+        Response.json({error:id});
+        return;
+        
+    }
+
+
+    manager.getNewVideo(id);
+
+})
+
+
+
+
+//console.log('watch');
 
 app.use(express.static(WWW));
 
 const port:number = process.env.PORT || 56555;
+
 
 
 app.listen(port,function(){

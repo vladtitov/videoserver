@@ -21,6 +21,7 @@ export class   MyVideos extends Cleaner{
     isInprocess:boolean;
     constructor(){
        super();
+       this.readInQueue();
     }
 
     registerReady(asset:VOAsset):void{
@@ -48,7 +49,8 @@ export class   MyVideos extends Cleaner{
     }
 
     onError(err:any,asset:VOAsset):void {
-        console.error(err, asset);
+
+        console.error('onError '+ new Date().toLocaleString());
         console.error(err, asset);
     }
 
@@ -65,19 +67,56 @@ export class   MyVideos extends Cleaner{
     }
 
 
+    removefromQueue(id:number):void{
+        var ind:number = this.inqueue.indexOf(id);
+          if(ind!==-1)return;
+          this.inqueue.splice(ind,1);
+          this.saveInQueue();      
+    }
+
+private readInQueue():void{
+    var str:string;
+    if(fs.existsSync('inqueue.json')) str = fs.readFileSync('inqueue.json','utf8')
+    
+    if(str)this.inqueue = JSON.parse(str);
+    else this.inqueue=[];
+}
+private saveInQueue():void{
+ fs.writeFile(path.resolve('inqueue.json'),JSON.stringify(this.inqueue), (err)=> {
+            if(err) return  this.onError(err,null);            
+        });
+}
+inqueue:number[];
+
+    addInQueue(id:number):boolean{
+        if(this.inqueue.indexOf(id)!==-1)return false;
+        this.inqueue.push[id];
+        this.saveInQueue();
+        return true;
+        
+    }
     videoStatus:string ='newvideo';
-    getNewVideo(){
+    getNewVideo(id?:number){
+
+    if(id){        
+        this.addInQueue(id);
+
+    }
 
         if(this.isInprocess) return;
         this.isInprocess = true;
 
 //console.log(this.server+'videoserver/get-new-file');
         var url:string = this.server+'videoserver/get-new-file/'+this.videoStatus;
+
         request.get(url,{json:true},(error, response:http.IncomingMessage, body)=>{
             console.log(body);
+           
             if(error){
+                this.isInprocess = false;
+                setTimeout(()=>this.getNewVideo(),60000);
                 this.onError(error,null);
-                return
+                return 
             }
 
 
@@ -100,7 +139,10 @@ export class   MyVideos extends Cleaner{
 
                     });
                 }
-            } else this.onError(body,null);
+            } else {
+                 setTimeout(()=>this.getNewVideo(),60000);
+                this.onError(body,null);
+            }
 
 
             // console.log(body)

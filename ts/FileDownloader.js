@@ -22,7 +22,7 @@ var FileDownloader = (function () {
         http.get(url, function (response) {
             response.pipe(file);
             file.on('finish', function () {
-                file.close();
+                file.close(); // close() is async, call cb after close completes.
                 callBack();
             }).on('error', function (err) {
                 fs.unlink(dest);
@@ -34,3 +34,4 @@ var FileDownloader = (function () {
     return FileDownloader;
 }());
 exports.FileDownloader = FileDownloader;
+//# sourceMappingURL=FileDownloader.js.map
