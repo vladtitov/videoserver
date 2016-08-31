@@ -36,8 +36,9 @@ app.use(function(req:express.Request, res:express.Response, next) {
     next();
 });
 
-app.get('newvideo/:id',function(req:express.Request, Response:express.Response) {
+app.get('/new-video/:id',function(req:express.Request, Response:express.Response) {
     var id:number = Number(req.params.id);
+    console.log(id);
     if(isNaN(id)){
         Response.json({error:id});
         return;
@@ -66,8 +67,14 @@ app.listen(port,function(){
 
 
 
-var manager:MyVideos = new MyVideos()
-manager.getNewVideo();
+var manager:MyVideos = new MyVideos();
+
+//manager.getNewVideo();
+var tofile:string =WWW+'/clientAssets/folder_hbrowser/_1472590012_dundas-collision-example-mar8-2016-2.mov';
+var tofile:string =WWW+'/clientAssets/folder_hbrowser/_1472590037_dundas-collision-example-jan27-2016-2.avi';
+//var tohilr:string =WWW+'/clientAssets/folder_hbrowser/_1472590006_dundas-collision-example-jan27-2016-2.avi';
+
+manager.converVideo(tofile);
 
 
 

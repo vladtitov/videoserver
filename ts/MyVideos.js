@@ -22,6 +22,7 @@ var MyVideos = (function (_super) {
         this.server = 'http://192.168.1.10:56777/';
         this.videoStatus = 'newvideo';
         this.readInQueue();
+        this.loadInProcess();
     }
     MyVideos.prototype.registerReady = function (asset) {
         var _this = this;
@@ -33,6 +34,24 @@ var MyVideos = (function (_super) {
                 return _this.onError(err, asset);
         });
     };
+    MyVideos.prototype.saveInProcess = function () {
+        var _this = this;
+        fs.writeFile(path.resolve('inprocess.json'), JSON.stringify(this.inProcess), function (err) {
+            if (err)
+                return _this.onError(err, null);
+        });
+    };
+    MyVideos.prototype.addInProcess = function (asset) {
+        this.inProcess.push(asset);
+        this.saveInProcess();
+        return true;
+    };
+    MyVideos.prototype.loadInProcess = function () {
+        if (fs.existsSync('inprocess.json'))
+            this.inProcess = JSON.parse(fs.readFileSync('inprocess.json', 'utf8'));
+        else
+            this.inProcess = [];
+    };
     MyVideos.prototype.downloadAsset = function (asset) {
         var _this = this;
         var dwd = new FileDownloader_1.FileDownloader(asset, this.server);
@@ -40,7 +59,9 @@ var MyVideos = (function (_super) {
             if (err)
                 return _this.onError(err, asset);
             var processor = new VideoProcess_1.VideoProcess(null);
-            processor.processVideo(asset).done(function (asset) { return _this.registerReady(asset); }, function (err) { return _this.onError(err, asset); });
+            if (_this.addInProcess(asset)) {
+                processor.processVideo(asset).done(function (asset) { return _this.registerReady(asset); }, function (err) { return _this.onError(err, asset); });
+            }
         };
         dwd.getFile();
     };
@@ -67,6 +88,10 @@ var MyVideos = (function (_super) {
         this.inqueue.splice(ind, 1);
         this.saveInQueue();
     };
+    MyVideos.prototype.converVideo = function (path) {
+        var processor = new VideoProcess_1.VideoProcess(null);
+        processor.convertVideoByPath(path);
+    };
     MyVideos.prototype.readInQueue = function () {
         var str;
         if (fs.existsSync('inqueue.json'))
@@ -81,12 +106,13 @@ var MyVideos = (function (_super) {
         fs.writeFile(path.resolve('inqueue.json'), JSON.stringify(this.inqueue), function (err) {
             if (err)
                 return _this.onError(err, null);
+            console.log('saved', _this.inqueue);
         });
     };
     MyVideos.prototype.addInQueue = function (id) {
         if (this.inqueue.indexOf(id) !== -1)
             return false;
-        this.inqueue.push[id];
+        this.inqueue.push(id);
         this.saveInQueue();
         return true;
     };
@@ -99,9 +125,9 @@ var MyVideos = (function (_super) {
             return;
         this.isInprocess = true;
         //console.log(this.server+'videoserver/get-new-file');
-        var url = this.server + 'videoserver/get-new-file/' + this.videoStatus;
+        var url = this.server + 'videos/get-new-file/' + this.videoStatus;
         request.get(url, { json: true }, function (error, response, body) {
-            console.log(body);
+            // console.log(body);
             if (error) {
                 _this.isInprocess = false;
                 setTimeout(function () { return _this.getNewVideo(); }, 60000);

@@ -22,6 +22,7 @@ export class   MyVideos extends Cleaner{
     constructor(){
        super();
        this.readInQueue();
+       this.loadInProcess();
     }
 
     registerReady(asset:VOAsset):void{
@@ -34,16 +35,37 @@ export class   MyVideos extends Cleaner{
         });
 
     }
+
+    inProcess:VOAsset[];
+    private saveInProcess():void{
+        fs.writeFile(path.resolve('inprocess.json'),JSON.stringify(this.inProcess), (err)=> {
+            if(err) return  this.onError(err,null);  
+                
+        });
+    }
+    private addInProcess(asset:VOAsset):boolean{
+        this.inProcess.push(asset);
+        this.saveInProcess();
+        return true;
+    }
+    private loadInProcess():void{
+          if(fs.existsSync('inprocess.json')) this.inProcess =JSON.parse(fs.readFileSync('inprocess.json','utf8'));
+          else this.inProcess=[];
+    }
     downloadAsset(asset:VOAsset):void{
 
         var dwd:FileDownloader = new FileDownloader(asset,this.server);
         dwd.onComplete = (err)=>{
             if(err) return this.onError(err,asset);
+
             var processor:VideoProcess = new VideoProcess(null);
-            processor.processVideo(asset).done(
+            if(this.addInProcess(asset)){
+                processor.processVideo(asset).done(
                 asset=>this.registerReady(asset)
                 ,err=>this.onError(err,asset)
             )
+            }
+           
         }
         dwd.getFile();
     }
@@ -74,6 +96,11 @@ export class   MyVideos extends Cleaner{
           this.saveInQueue();      
     }
 
+    converVideo(path:string):void{
+          var processor:VideoProcess = new VideoProcess(null);
+          processor.convertVideoByPath(path);
+    }
+
 private readInQueue():void{
     var str:string;
     if(fs.existsSync('inqueue.json')) str = fs.readFileSync('inqueue.json','utf8')
@@ -83,14 +110,15 @@ private readInQueue():void{
 }
 private saveInQueue():void{
  fs.writeFile(path.resolve('inqueue.json'),JSON.stringify(this.inqueue), (err)=> {
-            if(err) return  this.onError(err,null);            
+            if(err) return  this.onError(err,null);  
+            console.log('saved',this.inqueue)         
         });
 }
 inqueue:number[];
 
     addInQueue(id:number):boolean{
-        if(this.inqueue.indexOf(id)!==-1)return false;
-        this.inqueue.push[id];
+        if(this.inqueue.indexOf(id) !==-1)return false;
+        this.inqueue.push(id);
         this.saveInQueue();
         return true;
         
@@ -107,10 +135,10 @@ inqueue:number[];
         this.isInprocess = true;
 
 //console.log(this.server+'videoserver/get-new-file');
-        var url:string = this.server+'videoserver/get-new-file/'+this.videoStatus;
+        var url:string = this.server+'videos/get-new-file/'+this.videoStatus;
 
         request.get(url,{json:true},(error, response:http.IncomingMessage, body)=>{
-            console.log(body);
+           // console.log(body);
            
             if(error){
                 this.isInprocess = false;

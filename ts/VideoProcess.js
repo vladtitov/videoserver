@@ -3,8 +3,9 @@
 var Q = require('q');
 var path = require('path');
 var ffmpeg = require('fluent-ffmpeg');
-ffmpeg.setFfmpegPath(path.resolve(ROOT + "/libs/ffmpeg/bin/ffmpeg.exe"));
-ffmpeg.setFfprobePath(path.resolve(ROOT + "/libs/ffmpeg/bin/ffprobe.exe"));
+ffmpeg.setFfmpegPath(path.resolve(ROOT + "/libs/ffmpeg_win32/bin/ffmpeg.exe"));
+ffmpeg.setFfprobePath(path.resolve(ROOT + "/libs/ffmpeg_win32/bin/ffprobe.exe"));
+//console.log(fs.existsSync(ROOT+"/libs/ffmpeg_win32/bin/ffprobe.exe"));
 var VideoProcess = (function () {
     function VideoProcess(folder) {
         this.folder = folder;
@@ -47,6 +48,22 @@ var VideoProcess = (function () {
         }, asset.workingFolder);
         return deferred.promise;
     };
+    VideoProcess.prototype.convertVideoByPath = function (path_tofile) {
+        var src = path.resolve(path_tofile);
+        // console.log(src);
+        // console.log( fs.existsSync(src));
+        ffmpeg(src)
+            .on('end', function () {
+            console.log('end convert');
+            // asset.path = destPath;
+        })
+            .on('error', function (err) {
+            console.error(err);
+        })
+            .videoCodec('libx264')
+            .format('mp4')
+            .save(src + '.mp4');
+    };
     VideoProcess.prototype.convertVideo = function (asset) {
         var def = Q.defer();
         var filename = asset.filename;
@@ -73,25 +90,27 @@ var VideoProcess = (function () {
     VideoProcess.prototype.getMetadata = function (asset) {
         var deferred = Q.defer();
         var src = path.resolve(asset.workingFolder + '/' + asset.filename);
-        // console.log('tempDir+filename = ', this.tempDir+filename);
+        console.log('tempDir+filename = ', src);
         this.metadata = ffmpeg.ffprobe(src, function (err, mdata) {
             if (err) {
-                deferred.reject(err);
-                return;
+                return deferred.reject(err);
             }
             // console.log('metadata ', mdata);
             var stream = mdata.streams[0];
             asset.width = stream.width;
             asset.height = stream.height;
             asset.duration = Math.round(stream.duration);
+            deferred.reject(asset);
             // asset.metadata = JSON.stringify(mdata);
-            deferred.resolve(asset);
+            // deferred.resolve(asset);
         });
         return deferred.promise;
     };
     VideoProcess.prototype.processVideo = function (asset) {
         var _this = this;
         var deferred = Q.defer();
+        deferred.reject('test');
+        return deferred.promise;
         this.getMetadata(asset).then(function (asset) {
             // console.log('metadata ', vp.metadata);
             _this.convertVideo(asset).then(function (asset) {

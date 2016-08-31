@@ -27,6 +27,7 @@ export class Cleaner{
             fs.readdir(folder, (err, files:string[])=> {
                 if (err) callBack(err);
                 else{
+                    
                     files.forEach(function(file){
                         if(file.substr(0,10)===pattern)fs.unlink(folder+'/'+file);
                     })

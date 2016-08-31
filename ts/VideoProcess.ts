@@ -15,8 +15,9 @@ declare var ROOT:string;
 var ffmpeg = require('fluent-ffmpeg');
 
 
-ffmpeg.setFfmpegPath(path.resolve(ROOT + "/libs/ffmpeg/bin/ffmpeg.exe"));
-ffmpeg.setFfprobePath(path.resolve(ROOT+"/libs/ffmpeg/bin/ffprobe.exe"));
+ffmpeg.setFfmpegPath(path.resolve(ROOT + "/libs/ffmpeg_win32/bin/ffmpeg.exe"));
+ffmpeg.setFfprobePath(path.resolve(ROOT+"/libs/ffmpeg_win32/bin/ffprobe.exe"));
+//console.log(fs.existsSync(ROOT+"/libs/ffmpeg_win32/bin/ffprobe.exe"));
 
 
 export class  VideoProcess {
@@ -74,6 +75,30 @@ export class  VideoProcess {
 
         return deferred.promise;
     }
+convertVideoByPath(path_tofile:string):void{
+      var src:string = path.resolve(path_tofile);
+     // console.log(src);
+    // console.log( fs.existsSync(src));
+
+     
+       ffmpeg(src)
+            .on('end', function() {
+               console.log('end convert');
+               // asset.path = destPath;
+               
+
+            })
+            .on('error', function(err) {
+               console.error(err);
+            })
+           // .audioCodec('libfaac')
+            .videoCodec('libx264')
+            .format('mp4')
+
+            .save(src+'.mp4');
+
+
+}
 
     convertVideo(asset:VOAsset): Q.Promise<any>{
         var def: Q.Deferred<any> = Q.defer();
@@ -111,18 +136,18 @@ export class  VideoProcess {
     getMetadata(asset:VOAsset): Q.Promise<any>  {
         var deferred: Q.Deferred<any> = Q.defer();
         var src:string = path.resolve(asset.workingFolder+'/'+asset.filename);
-        // console.log('tempDir+filename = ', this.tempDir+filename);
+       console.log('tempDir+filename = ', src);
         this.metadata = ffmpeg.ffprobe(src, function(err, mdata) {
-            if(err) { deferred.reject(err); return; }
+            if(err) { return  deferred.reject(err); }
             // console.log('metadata ', mdata);
             var stream = mdata.streams[0];
 
             asset.width = stream.width;
             asset.height = stream.height;
             asset.duration = Math.round(stream.duration);
-
+deferred.reject(asset)
             // asset.metadata = JSON.stringify(mdata);
-            deferred.resolve(asset);
+           // deferred.resolve(asset);
         });
         return deferred.promise;
     }
@@ -130,6 +155,8 @@ export class  VideoProcess {
 
    processVideo(asset:VOAsset): Q.Promise<any> {
         var deferred: Q.Deferred<any> = Q.defer();
+        deferred.reject('test');
+        return deferred.promise
 
         this.getMetadata(asset).then( (asset:VOAsset)=> {
             // console.log('metadata ', vp.metadata);
