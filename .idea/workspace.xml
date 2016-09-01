@@ -2,30 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98ff5de7-4c3d-4a4d-b1b0-b9f677e34e0a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/inprocess.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/clientAssets/folder_hbrowser/testvideo.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/www/inprocess.json" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/inqueue.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ts/Cleaner.js.map" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ts/Cleaner.js.map" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js.map" afterPath="$PROJECT_DIR$/server.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.ts" afterPath="$PROJECT_DIR$/server.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/Cleaner.js" afterPath="$PROJECT_DIR$/ts/Cleaner.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/Cleaner.ts" afterPath="$PROJECT_DIR$/ts/Cleaner.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/FileDownloader.js" afterPath="$PROJECT_DIR$/ts/FileDownloader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/FileDownloader.js.map" afterPath="$PROJECT_DIR$/ts/FileDownloader.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/FileDownloader.ts" afterPath="$PROJECT_DIR$/ts/FileDownloader.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/MyVideos.js" afterPath="$PROJECT_DIR$/ts/MyVideos.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/MyVideos.js.map" afterPath="$PROJECT_DIR$/ts/MyVideos.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/MyVideos.ts" afterPath="$PROJECT_DIR$/ts/MyVideos.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/VideoProcess.js" afterPath="$PROJECT_DIR$/ts/VideoProcess.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/VideoProcess.js.map" afterPath="$PROJECT_DIR$/ts/VideoProcess.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/VideoProcess.ts" afterPath="$PROJECT_DIR$/ts/VideoProcess.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/models.js" afterPath="$PROJECT_DIR$/ts/models.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/models.js.map" afterPath="$PROJECT_DIR$/ts/models.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ts/models.ts" afterPath="$PROJECT_DIR$/ts/models.ts" />
     </list>
     <ignored path="videoserver.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -51,8 +30,8 @@
       <file leaf-file-name="server.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
-              <caret line="62" column="20" selection-start-line="62" selection-start-column="20" selection-end-line="62" selection-end-column="20" />
+            <state relative-caret-position="141">
+              <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#476#511#0" expanded="true" />
@@ -61,21 +40,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyVideos.ts" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MyVideos.ts" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ts/MyVideos.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="51" column="38" selection-start-line="51" selection-start-column="38" selection-end-line="51" selection-end-column="38" />
+            <state relative-caret-position="1530">
+              <caret line="93" column="5" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="5" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#78#111#0" expanded="true" />
@@ -120,8 +89,8 @@
       <file leaf-file-name="Cleaner.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ts/Cleaner.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="21" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+            <state relative-caret-position="0">
+              <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="4" />
               <folding>
                 <element signature="e#65#98#0" expanded="true" />
               </folding>
@@ -347,12 +316,20 @@
       <option name="presentableId" value="Default" />
       <updated>1472514664340</updated>
       <workItem from="1472514665979" duration="1043000" />
-      <workItem from="1472657750114" duration="43591000" />
+      <workItem from="1472657750114" duration="44906000" />
     </task>
+    <task id="LOCAL-00001" summary="fix videoserver">
+      <created>1472765428040</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1472765428040</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44634000" />
+    <option name="totallyTimeSpent" value="45949000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -365,7 +342,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3686007" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.42832765" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -406,6 +383,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix videoserver" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix videoserver" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -547,38 +528,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ts/VideoProcess.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
-          <folding>
-            <element signature="e#172#197#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="62" column="20" selection-start-line="62" selection-start-column="20" selection-end-line="62" selection-end-column="20" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#476#511#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ts/MyVideos.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="51" column="38" selection-start-line="51" selection-start-column="38" selection-end-line="51" selection-end-column="38" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#78#111#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ts/Cleaner.js.map">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -614,21 +563,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#476#511#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ts/VideoProcess.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-85">
+          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+          <folding>
+            <element signature="e#172#197#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ts/Cleaner.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="21" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+        <state relative-caret-position="0">
+          <caret line="20" column="4" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="4" />
           <folding>
             <element signature="e#65#98#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/ts/MyVideos.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
+        <state relative-caret-position="1530">
+          <caret line="93" column="5" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="5" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#78#111#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
