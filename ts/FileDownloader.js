@@ -15,6 +15,7 @@ var FileDownloader = (function () {
         });
     };
     FileDownloader.prototype.downloader = function (callBack) {
+        console.log('downloader');
         var dest = path.resolve(this.asset.workingFolder + '/' + this.asset.filename);
         var file = fs.createWriteStream(dest);
         var url = this.server + '/' + this.asset.path;
@@ -22,7 +23,7 @@ var FileDownloader = (function () {
         http.get(url, function (response) {
             response.pipe(file);
             file.on('finish', function () {
-                file.close(); // close() is async, call cb after close completes.
+                file.close();
                 callBack();
             }).on('error', function (err) {
                 fs.unlink(dest);
@@ -34,4 +35,3 @@ var FileDownloader = (function () {
     return FileDownloader;
 }());
 exports.FileDownloader = FileDownloader;
-//# sourceMappingURL=FileDownloader.js.map

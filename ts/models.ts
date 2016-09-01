@@ -14,6 +14,7 @@ export class VOAsset {
     path:string;
     destination:string;
     workingFolder:string;
+    errorCount:number;
     token:string;
     folder:string;
     size:number;

@@ -14,26 +14,25 @@ import {FileDownloader} from "./FileDownloader";
 import {VideoProcess} from "./VideoProcess";
 import {Cleaner} from "./Cleaner";
 
+
 declare var WWW:string;
 
 export class   MyVideos extends Cleaner{
-    server:string = 'http://192.168.1.10:56777/';
+    // server:string = 'http://192.168.1.10:56777/';
+    // server:string = 'http://192.168.0.82:56777/';
+    server:string = 'http://127.0.0.1:56777/';
+
     isInprocess:boolean;
+
     constructor(){
        super();
-       this.readInQueue();
        this.loadInProcess();
     }
 
-    registerReady(asset:VOAsset):void{
+    registerProcessed(asset:VOAsset):void{
         asset.status='processed';
-        this.sendReady(asset)
-        var jsonfile:string = 'asset_'+asset.id+'.json';
-
-        fs.writeFile(path.resolve(WWW+'/ready/'+jsonfile),JSON.stringify(asset), (err)=> {
-            if(err) return this.onError(err,asset)
-        });
-
+        this.saveInProcess();
+        this.sendProcessed(asset);
     }
 
     inProcess:VOAsset[];
@@ -43,29 +42,88 @@ export class   MyVideos extends Cleaner{
                 
         });
     }
+    checkIsEnyProessed(){
+        console.log('checkIsEnyProessed');
+        var assetInProess:VOAsset[] = this.inProcess.filter(function(asset) {
+            return asset.status == 'processed';
+        });
+        console.log('assetInProess: ', assetInProess[0]);
+        if(assetInProess.length) this.sendProcessed(assetInProess[0]);
+        else this.isInprocess = false;
+    }
     private addInProcess(asset:VOAsset):boolean{
         this.inProcess.push(asset);
         this.saveInProcess();
         return true;
     }
     private loadInProcess():void{
-          if(fs.existsSync('inprocess.json')) this.inProcess =JSON.parse(fs.readFileSync('inprocess.json','utf8'));
-          else this.inProcess=[];
+        console.log('loadInProcess');
+        if(fs.existsSync('inprocess.json')) this.inProcess =JSON.parse(fs.readFileSync('inprocess.json','utf8'));
+        else this.inProcess=[];
     }
-    downloadAsset(asset:VOAsset):void{
+    retrieveProcess():boolean{
+        console.log('retrieveProcess');
+        console.log('inProcess:', this.inProcess.length);
+        // newvideo -> обработать
+        //
+        if(this.inProcess.length) {
 
+            if(this.inProcess[0].status == "newvideo") this.startProcessVideo(this.inProcess[0]);
+
+            // switch (this.inProcess[0].status) {
+            //     case "newvideo":
+            //         this.startProcessVideo(this.inProcess[0]);
+            //         break;
+            //     case 5:
+            //         alert( 'Перебор' );
+            //         break;
+            //     default:
+            //         alert( 'Я таких значений не знаю' );
+            // }
+
+        } //this.downloadAsset(this.inProcess[0]);
+
+        return this.inProcess.length !== 0;
+    }
+    removeProcessById(id:number){
+        var arr:VOAsset[] = this.inProcess;
+        for(var i=arr.length; i>=0; i--){
+            if(arr[i].id === id) arr.slice(i,1);
+        }
+        this.saveInProcess();
+    }
+    startProcessVideo(asset:VOAsset){
+        console.log('startProcessVideo');
+        var processor:VideoProcess = new VideoProcess(null);
+
+        processor.processVideo(asset).done(
+            asset=>this.registerProcessed(asset)
+            ,err=>{
+                this.onError(err,asset)
+            }
+        )
+    }
+
+    downloadAsset(asset:VOAsset):void{
+        console.log('downloadAsset');
         var dwd:FileDownloader = new FileDownloader(asset,this.server);
         dwd.onComplete = (err)=>{
-            if(err) return this.onError(err,asset);
+            if(err) {
+                console.log('onComplete error', err);
+                asset.errorCount++;
+                if(asset.errorCount > 5) {
+                    this.removeProcessById(asset.id);
+                    if(!this.retrieveProcess()) this.getNewVideo();
+                    return;
+                }
+                setTimeout(()=> this.downloadAsset(asset),60000);
+                asset.status = 'errorDownload';
 
-            var processor:VideoProcess = new VideoProcess(null);
-            if(this.addInProcess(asset)){
-                processor.processVideo(asset).done(
-                asset=>this.registerReady(asset)
-                ,err=>this.onError(err,asset)
-            )
+                this.saveInProcess();
+                return this.onError(err,asset);
             }
-           
+            asset.errorCount = 0;
+            this.startProcessVideo(asset);
         }
         dwd.getFile();
     }
@@ -77,23 +135,15 @@ export class   MyVideos extends Cleaner{
     }
 
     startProcess(asset:VOAsset){
-        fs.writeFile(path.resolve(asset.workingFolder+'/asset.json'),JSON.stringify(asset), (err)=> {
-            if(err) return  this.onError(err,asset);
-            this.downloadAsset(asset);
-        });
+        asset.errorCount = 0;
+        this.addInProcess(asset);
+        this.downloadAsset(asset);
     }
 
 
     onIdle():void{
         setTimeout(()=>this.getNewVideo(),6000);
-    }
-
-
-    removefromQueue(id:number):void{
-        var ind:number = this.inqueue.indexOf(id);
-          if(ind!==-1)return;
-          this.inqueue.splice(ind,1);
-          this.saveInQueue();      
+        this.checkIsEnyProessed();
     }
 
     converVideo(path:string):void{
@@ -101,62 +151,34 @@ export class   MyVideos extends Cleaner{
           processor.convertVideoByPath(path);
     }
 
-private readInQueue():void{
-    var str:string;
-    if(fs.existsSync('inqueue.json')) str = fs.readFileSync('inqueue.json','utf8')
-    
-    if(str)this.inqueue = JSON.parse(str);
-    else this.inqueue=[];
-}
-private saveInQueue():void{
- fs.writeFile(path.resolve('inqueue.json'),JSON.stringify(this.inqueue), (err)=> {
-            if(err) return  this.onError(err,null);  
-            console.log('saved',this.inqueue)         
-        });
-}
-inqueue:number[];
 
-    addInQueue(id:number):boolean{
-        if(this.inqueue.indexOf(id) !==-1)return false;
-        this.inqueue.push(id);
-        this.saveInQueue();
-        return true;
-        
-    }
-    videoStatus:string ='newvideo';
-    getNewVideo(id?:number){
-
-    if(id){        
-        this.addInQueue(id);
-
-    }
-
-        if(this.isInprocess) return;
+    getNewVideo():boolean{
+        console.log('getNewVideo');
+        console.log('isInprocess:', this.isInprocess);
+        if(this.isInprocess) return false;
         this.isInprocess = true;
 
 //console.log(this.server+'videoserver/get-new-file');
-        var url:string = this.server+'videos/get-new-file/'+this.videoStatus;
-
+        var url:string = this.server+'videos/get-new-video';
+        console.log('getNewVideo url:', url);
         request.get(url,{json:true},(error, response:http.IncomingMessage, body)=>{
-           // console.log(body);
-           
+
             if(error){
+                console.log('getNewVideo error');
                 this.isInprocess = false;
                 setTimeout(()=>this.getNewVideo(),60000);
                 this.onError(error,null);
                 return 
             }
 
-
             if(body.data){
+                console.log('getNewVideo body: ',body.data);
                 var asset:VOAsset = new VOAsset(body.data);
                 if(!asset.id) {
                     return;
                 }
 
-
                 asset.workingFolder= path.resolve(WWW+'/'+asset.folder);
-
 
                 if(fs.existsSync(asset.workingFolder)){
                     this.startProcess(asset);
@@ -177,6 +199,6 @@ inqueue:number[];
 
 
         });
-
+        return true;
     }
 }

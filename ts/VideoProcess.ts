@@ -136,6 +136,7 @@ convertVideoByPath(path_tofile:string):void{
     getMetadata(asset:VOAsset): Q.Promise<any>  {
         var deferred: Q.Deferred<any> = Q.defer();
         var src:string = path.resolve(asset.workingFolder+'/'+asset.filename);
+        console.log('getMetadata');
        console.log('tempDir+filename = ', src);
         this.metadata = ffmpeg.ffprobe(src, function(err, mdata) {
             if(err) { return  deferred.reject(err); }
@@ -145,7 +146,8 @@ convertVideoByPath(path_tofile:string):void{
             asset.width = stream.width;
             asset.height = stream.height;
             asset.duration = Math.round(stream.duration);
-deferred.reject(asset)
+            deferred.resolve(asset);
+// deferred.reject(asset)
             // asset.metadata = JSON.stringify(mdata);
            // deferred.resolve(asset);
         });
@@ -155,8 +157,8 @@ deferred.reject(asset)
 
    processVideo(asset:VOAsset): Q.Promise<any> {
         var deferred: Q.Deferred<any> = Q.defer();
-        deferred.reject('test');
-        return deferred.promise
+
+       console.log('processVideo');
 
         this.getMetadata(asset).then( (asset:VOAsset)=> {
             // console.log('metadata ', vp.metadata);

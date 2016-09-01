@@ -17,7 +17,6 @@ var VOPlayLists_Assets = (function () {
     return VOPlayLists_Assets;
 }());
 exports.VOPlayLists_Assets = VOPlayLists_Assets;
-// table playlist
 var VOPlayListProps = (function () {
     function VOPlayListProps(obj) {
         for (var str in obj)
@@ -39,7 +38,6 @@ var VOPlaylist = (function () {
     return VOPlaylist;
 }());
 exports.VOPlaylist = VOPlaylist;
-// table layouts
 var VOLayoutProps = (function () {
     function VOLayoutProps(obj) {
         for (var str in obj)
@@ -50,7 +48,6 @@ var VOLayoutProps = (function () {
     return VOLayoutProps;
 }());
 exports.VOLayoutProps = VOLayoutProps;
-//
 var VOLayout = (function () {
     function VOLayout(obj) {
         for (var str in obj)
@@ -122,4 +119,3 @@ var VOUserData = (function () {
     return VOUserData;
 }());
 exports.VOUserData = VOUserData;
-//# sourceMappingURL=models.js.map

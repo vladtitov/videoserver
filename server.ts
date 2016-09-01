@@ -36,19 +36,11 @@ app.use(function(req:express.Request, res:express.Response, next) {
     next();
 });
 
-app.get('/new-video/:id',function(req:express.Request, Response:express.Response) {
-    var id:number = Number(req.params.id);
-    console.log(id);
-    if(isNaN(id)){
-        Response.json({error:id});
-        return;
-        
-    }
+app.get('/wake-up',function(req:express.Request, response:express.Response) {
+    console.log('wake-up');
+    response.json({data:manager.getNewVideo()});
 
-
-    manager.getNewVideo(id);
-
-})
+});
 
 
 
@@ -68,13 +60,14 @@ app.listen(port,function(){
 
 
 var manager:MyVideos = new MyVideos();
+if(!manager.retrieveProcess()) manager.getNewVideo();
+manager.checkIsEnyProessed();
 
-//manager.getNewVideo();
-var tofile:string =WWW+'/clientAssets/folder_hbrowser/_1472590012_dundas-collision-example-mar8-2016-2.mov';
-var tofile:string =WWW+'/clientAssets/folder_hbrowser/_1472590037_dundas-collision-example-jan27-2016-2.avi';
+// var tofile:string =WWW+'/clientAssets/folder_hbrowser/_1472590012_dundas-collision-example-mar8-2016-2.mov';
+// var tofile:string =WWW+'/clientAssets/folder_hbrowser/_1472590037_dundas-collision-example-jan27-2016-2.avi';
 //var tohilr:string =WWW+'/clientAssets/folder_hbrowser/_1472590006_dundas-collision-example-jan27-2016-2.avi';
 
-manager.converVideo(tofile);
+// manager.converVideo(tofile);
 
 
 

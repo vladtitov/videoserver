@@ -21,21 +21,16 @@ export class Cleaner{
     removeAsset(asset:VOAsset,callBack:Function):void{
 
         var folder:string = path.resolve(WWW+'/'+asset.folder);
-        var jsonfile:string = 'asset_'+asset.id+'.json';
         var pattern:string = asset.filename.substr(0,10);
-        fs.unlink(WWW+'/ready/'+jsonfile,(err)=>{
-            fs.readdir(folder, (err, files:string[])=> {
-                if (err) callBack(err);
-                else{
-                    
-                    files.forEach(function(file){
-                        if(file.substr(0,10)===pattern)fs.unlink(folder+'/'+file);
-                    })
-                    callBack();
-                }
+        fs.readdir(folder, (err, files:string[])=> {
+            if (err) callBack(err);
+            else{
 
-            });
-
+                files.forEach(function(file){
+                    if(file.substr(0,10)===pattern)fs.unlink(folder+'/'+file);
+                })
+                callBack();
+            }
 
         });
     }
@@ -44,23 +39,34 @@ export class Cleaner{
 
     }
 
-    sendReady(asset:VOAsset):void{
+    removeProcessById(id:number){ }
+
+
+
+    sendProcessed(asset:VOAsset):void{
+        console.log('sendProcessed');
         asset.status= 'processed';
-        var url:string =this.server+'videoserver/ready'
-        //console.log(url);
-        request.post(url,{json: true,body:asset},(err,res,body)=>{
+        // var url:string =this.server+'videoserver/processed';
+        var url:string =this.server+'videos/processed';
+        console.log(url);
+        var asset1 = new VOAsset(asset);
+        delete  asset1.workingFolder;
+        delete  asset1.errorCount;
+        request.post(url,{json: true,body:asset1},(err,res,body)=>{
             // console.log(err);
             // console.log(body);
             if(body.data){
-                var asset:VOAsset = new VOAsset(body.data)
+                var asset2:VOAsset = new VOAsset(body.data);
                 this.isInprocess = false;
-                if(asset.id && asset.status=='ready')this.removeAsset(asset,(err)=>{
+                if(asset2.id && asset2.status=='ready') this.removeAsset(asset,(err)=>{
                     if(err)this.onError(err,asset);
+
+                    this.removeProcessById(asset.id);
 
                     console.log('removed '+asset.folder)
                    this.onIdle();
                 })
-            }
+            } else setTimeout(()=>this.sendProcessed(asset),60000);
 
         })
     }

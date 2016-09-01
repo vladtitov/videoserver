@@ -14,9 +14,6 @@ export class FileDownloader{
     onComplete:Function;
     constructor(private asset:VOAsset,private server:string){
 
-
-
-
     }
 
     getFile():void{
@@ -25,9 +22,8 @@ export class FileDownloader{
         })
     }
 
-
-
     downloader(callBack:Function):void{
+        console.log('downloader');
         var dest = path.resolve(this.asset.workingFolder+'/'+this.asset.filename);
         var file = fs.createWriteStream(dest);
         var url:string = this.server+'/'+this.asset.path;

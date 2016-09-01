@@ -1,11 +1,3 @@
-/**
- * Created by Vlad on 5/13/2016.
- */
-/// <reference path="typings/express/express.d.ts" />
-/// <reference path="typings/body-parser/body-parser.d.ts" />
-///<reference path="typings/express-session/express-session.d.ts"/>
-///<reference path="typings/cookie-parser/cookie-parser.d.ts"/>
-///<reference path="typings/request/request.d.ts"/>
 "use strict";
 var path = require('path');
 GLOBAL.ROOT = __dirname;
@@ -18,25 +10,16 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-app.get('/new-video/:id', function (req, Response) {
-    var id = Number(req.params.id);
-    console.log(id);
-    if (isNaN(id)) {
-        Response.json({ error: id });
-        return;
-    }
-    manager.getNewVideo(id);
+app.get('/wake-up', function (req, response) {
+    console.log('wake-up');
+    response.json({ data: manager.getNewVideo() });
 });
-//console.log('watch');
 app.use(express.static(WWW));
 var port = process.env.PORT || 56555;
 app.listen(port, function () {
     console.log('http://' + port);
 });
 var manager = new MyVideos_1.MyVideos();
-//manager.getNewVideo();
-var tofile = WWW + '/clientAssets/folder_hbrowser/_1472590012_dundas-collision-example-mar8-2016-2.mov';
-var tofile = WWW + '/clientAssets/folder_hbrowser/_1472590037_dundas-collision-example-jan27-2016-2.avi';
-//var tohilr:string =WWW+'/clientAssets/folder_hbrowser/_1472590006_dundas-collision-example-jan27-2016-2.avi';
-manager.converVideo(tofile);
-//# sourceMappingURL=server.js.map
+if (!manager.retrieveProcess())
+    manager.getNewVideo();
+manager.checkIsEnyProessed();

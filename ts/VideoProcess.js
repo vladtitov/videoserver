@@ -1,11 +1,9 @@
-///<reference path="../typings/q/Q.d.ts"/>
 "use strict";
 var Q = require('q');
 var path = require('path');
 var ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(path.resolve(ROOT + "/libs/ffmpeg_win32/bin/ffmpeg.exe"));
 ffmpeg.setFfprobePath(path.resolve(ROOT + "/libs/ffmpeg_win32/bin/ffprobe.exe"));
-//console.log(fs.existsSync(ROOT+"/libs/ffmpeg_win32/bin/ffprobe.exe"));
 var VideoProcess = (function () {
     function VideoProcess(folder) {
         this.folder = folder;
@@ -15,7 +13,6 @@ var VideoProcess = (function () {
         var filename = asset.filename;
         var src = path.resolve(asset.workingFolder + '/' + asset.filename);
         var currentFolder = this.folder + 'userVideos/';
-        // var destPath = cientFolder + filename;
         var thumbs;
         var w = 256;
         var k = w / asset.width;
@@ -31,7 +28,6 @@ var VideoProcess = (function () {
                 return val;
             });
             asset.thumb = thumbs.join(', ');
-            // console.log('screenshots are ' + thumbs.join(', '));
         })
             .on('end', function () {
             deferred.resolve(asset);
@@ -42,7 +38,6 @@ var VideoProcess = (function () {
         })
             .takeScreenshots({
             filename: filename + '.png',
-            // count: 1,
             timemarks: ['10%', '30%', '50%'],
             size: w + 'x' + h
         }, asset.workingFolder);
@@ -50,12 +45,9 @@ var VideoProcess = (function () {
     };
     VideoProcess.prototype.convertVideoByPath = function (path_tofile) {
         var src = path.resolve(path_tofile);
-        // console.log(src);
-        // console.log( fs.existsSync(src));
         ffmpeg(src)
             .on('end', function () {
             console.log('end convert');
-            // asset.path = destPath;
         })
             .on('error', function (err) {
             console.error(err);
@@ -68,14 +60,11 @@ var VideoProcess = (function () {
         var def = Q.defer();
         var filename = asset.filename;
         var src = path.resolve(asset.workingFolder + '/' + asset.filename);
-        // var cientFolder = this.folder + 'userVideos/';
         var newName = asset.filename.substr(0, asset.filename.lastIndexOf('.')) + '.mp4';
         var destPath = path.resolve(asset.workingFolder + '/' + newName);
-        //  var cientFolder = this.folder + 'userVideos/';
         ffmpeg(src)
             .on('end', function () {
             console.log('end convert');
-            // asset.path = destPath;
             asset.filename = newName;
             def.resolve(asset);
         })
@@ -90,45 +79,34 @@ var VideoProcess = (function () {
     VideoProcess.prototype.getMetadata = function (asset) {
         var deferred = Q.defer();
         var src = path.resolve(asset.workingFolder + '/' + asset.filename);
+        console.log('getMetadata');
         console.log('tempDir+filename = ', src);
         this.metadata = ffmpeg.ffprobe(src, function (err, mdata) {
             if (err) {
                 return deferred.reject(err);
             }
-            // console.log('metadata ', mdata);
             var stream = mdata.streams[0];
             asset.width = stream.width;
             asset.height = stream.height;
             asset.duration = Math.round(stream.duration);
-            deferred.reject(asset);
-            // asset.metadata = JSON.stringify(mdata);
-            // deferred.resolve(asset);
+            deferred.resolve(asset);
         });
         return deferred.promise;
     };
     VideoProcess.prototype.processVideo = function (asset) {
         var _this = this;
         var deferred = Q.defer();
-        deferred.reject('test');
-        return deferred.promise;
+        console.log('processVideo');
         this.getMetadata(asset).then(function (asset) {
-            // console.log('metadata ', vp.metadata);
             _this.convertVideo(asset).then(function (asset) {
                 _this.makeThumbnails(asset).then(function (asset) {
                     deferred.resolve(asset);
-                    // console.log('vp.makeThumbnail done ', asset);
-                    /*  this.insertInDB(asset).then(function (result:UpdateResult) {
-                          deferred.resolve(result);
-                      }, (err)=> {deferred.reject(err)});
-  */
                 }, function (err) { deferred.reject(err); });
             }, function (err) { deferred.reject(err); });
         }, function (err) { deferred.reject(err); });
-        // console.log('processVideo');
         return deferred.promise;
     };
     ;
     return VideoProcess;
 }());
 exports.VideoProcess = VideoProcess;
-//# sourceMappingURL=VideoProcess.js.map
